@@ -1,0 +1,24 @@
+name: Build Image
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Docker Login
+        run: |
+          echo "${{ secrets.DOCKERPASS }}" | docker login -u ${{ secrets.DOCKERUSER }} --password-stdin
+      - name: Build image
+        run: |
+          docker build . --file Dockerfile --no-cache -t $GITHUB_SHA
+      - name: Tag image
+        run: |
+          docker tag $GITHUB_SHA ${{ secrets.DOCKERUSER }}/${{ secrets.DOCKERREPOSITORY }}
+          docker tag $GITHUB_SHA ${{ secrets.DOCKERUSER }}/${{ secrets.DOCKERREPOSITORY }}:$GITHUB_SHA
+          docker tag $GITHUB_SHA docker.io/${{ secrets.DOCKERUSER }}/${{ secrets.DOCKERREPOSITORY }}
+          docker tag $GITHUB_SHA docker.io/${{ secrets.DOCKERUSER }}/${{ secrets.DOCKERREPOSITORY }}:$GITHUB_SHA
+      - name: Push image
+        run: |
+          docker push ${{ secrets.DOCKERUSER }}/${{ secrets.DOCKERREPOSITORY }}

@@ -34,6 +34,17 @@ Run this:
 
 `docker build --tag flashforge-api . && docker run --publish 5000:5000 flashforge-api`
 
+# Run it as a Docker on unRaid
+Goto CA (apps).
+Search for flashforge.
+Click to show results from DockerHub.
+Click Install for flashforge_api
+If asked, don't determine configuration.
+Set the container name you want.
+Set your network type & IP...
+Add a Port which points at port 5000 on the container.
+Hit Apply to pull down container.
+
 # Start it on your machine
 1. Make sure you have Flask installed:
 
